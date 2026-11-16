@@ -1,0 +1,23 @@
+{% if en_encabezado %}
+<nav class="panel-menu">
+    <a href="{% url 'inicio_panel' %}">Inicio</a>
+
+    {% if perms.reservas.view_reserva %}
+        <a href="{% url 'lista_reservas' %}">Reservas</a>
+    {% endif %}
+
+    {% if perms.habitaciones.view_habitacion %}
+        <a href="{% url 'estado_habitaciones' %}">Ocupación</a>
+        <a href="{% url 'lista_habitaciones' %}">Habitaciones</a>
+    {% endif %}
+
+    {% if perms.habitaciones.add_habitacion %}
+        <a href="{% url 'lista_personal' %}">Personal</a>
+    {% endif %}
+
+    <form method="post" action="{% url 'logout' %}" class="panel-menu-salir">
+        {% csrf_token %}
+        <button type="submit">Cerrar sesión ({{ request.user.username }})</button>
+    </form>
+</nav>
+{% endif %}

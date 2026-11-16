@@ -1,0 +1,1111 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f7f4;
+    color: #263c3b;
+    line-height: 1.6;
+}
+
+.encabezado {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.navegacion {
+    max-width: 1200px;
+    margin: auto;
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.logo {
+    color: #234e4a;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.enlaces {
+    display: flex;
+    gap: 28px;
+}
+
+.enlaces a {
+    text-decoration: none;
+    color: #263c3b;
+    font-weight: 500;
+}
+
+.enlaces a:hover {
+    color: #bc9362;
+}
+
+.hero {
+    min-height: 480px;
+    background: linear-gradient(135deg, #214b47, #47716b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+    color: white;
+}
+
+.hero-contenido {
+    max-width: 720px;
+}
+
+.subtitulo {
+    letter-spacing: 3px;
+    font-size: 12px;
+    color: #e8d2b3;
+}
+
+.hero h1 {
+    font-size: clamp(34px, 5vw, 56px);
+    margin: 18px 0;
+}
+
+.hero p {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.boton {
+    display: inline-block;
+    background-color: #c6a477;
+    color: #192e2c;
+    padding: 13px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.boton:hover {
+    background-color: #dfbd90;
+}
+
+.seccion {
+    max-width: 1200px;
+    margin: auto;
+    padding: 75px 24px;
+    text-align: center;
+}
+
+.seccion h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 35px;
+}
+
+.tarjeta {
+    padding: 45px 25px;
+    background: white;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+}
+
+.tarjeta h3 {
+    margin-bottom: 12px;
+}
+
+.reservas {
+    padding-bottom: 100px;
+}
+
+.pie {
+    padding: 28px;
+    background: #193b38;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .navegacion {
+        flex-direction: column;
+    }
+
+    .enlaces {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .tarjetas {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ACCESO DEL PERSONAL */
+
+.acceso-personal {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    background: #f4f8f6;
+}
+
+.login-contenedor {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.login-contenedor h1 {
+    color: #245c50;
+    margin-bottom: 10px;
+}
+
+.login-contenedor p {
+    color: #66756e;
+    margin-bottom: 25px;
+}
+
+.login-contenedor form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.login-contenedor label {
+    font-weight: 600;
+    color: #344a41;
+}
+
+.login-contenedor input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd8d1;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.boton-login {
+    margin-top: 12px;
+    padding: 13px;
+    background: #245c50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.boton-login:hover {
+    background: #19463d;
+}
+
+.login-error {
+    padding: 12px;
+    background: #fde8e8;
+    color: #a12626 !important;
+    border-radius: 8px;
+}
+
+
+/* PANEL PRIVADO DEL HOTEL */
+
+.panel-hotel {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 50px 25px;
+    min-height: 75vh;
+}
+
+.panel-encabezado {
+    margin-bottom: 35px;
+}
+
+.panel-encabezado h1 {
+    color: #245c50;
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.panel-encabezado p {
+    color: #52675d;
+    margin-bottom: 12px;
+}
+
+.panel-rol {
+    display: inline-block;
+    background: #e3f0e9;
+    color: #245c50;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.panel-tarjetas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-bottom: 40px;
+}
+
+.panel-tarjeta {
+    background: white;
+    border: 1px solid #e1e8e3;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.panel-tarjeta h3 {
+    color: #52675d;
+    font-size: 16px;
+    margin-bottom: 18px;
+}
+
+.panel-tarjeta p {
+    color: #245c50;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.panel-acciones {
+    background: #f4f8f6;
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.panel-acciones h2 {
+    color: #245c50;
+    margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+    .panel-tarjetas {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* GESTIÓN DE HABITACIONES */
+
+.tabla-habitaciones {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background: white;
+}
+
+.tabla-habitaciones th,
+.tabla-habitaciones td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e1e8e3;
+}
+
+.tabla-habitaciones th {
+    background: #245c50;
+    color: white;
+}
+
+.tabla-habitaciones tr:hover {
+    background: #f4f8f6;
+}
+
+.formulario-habitacion {
+    max-width: 550px;
+    margin-top: 25px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.formulario-habitacion p {
+    margin-bottom: 18px;
+}
+
+.formulario-habitacion label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+}
+
+.formulario-habitacion input,
+.formulario-habitacion select,
+.formulario-habitacion textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ccd8d1;
+    border-radius: 7px;
+}
+
+/* =====================================
+   BOTONES DEL PANEL ADMINISTRATIVO
+===================================== */
+
+.btn-panel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+/* Botón principal */
+.btn-panel-primario {
+    background: #245c50;
+    color: #ffffff;
+}
+
+.btn-panel-primario:hover {
+    background: #19463d;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(36, 92, 80, 0.18);
+}
+
+/* Botón secundario */
+.btn-panel-secundario {
+    background: #e8f1ed;
+    color: #245c50;
+    border-color: #d4e4dc;
+}
+
+.btn-panel-secundario:hover {
+    background: #d7e8df;
+    color: #19463d;
+}
+
+/* Botón pequeño para tablas */
+.btn-panel-pequeno {
+    padding: 7px 14px;
+    font-size: 13px;
+}
+
+/* Contenedor de acciones */
+.panel-barra-acciones {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 22px 0;
+}
+
+/* Mensajes de confirmación */
+.panel-mensaje {
+    background: #e8f4ed;
+    color: #245c50;
+    padding: 13px 18px;
+    border-left: 4px solid #245c50;
+    border-radius: 7px;
+    margin: 18px 0;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 600px) {
+    .panel-barra-acciones {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .panel-barra-acciones .btn-panel {
+        width: 100%;
+    }
+}
+
+/* Ajustes de alineación de botones */
+
+.btn-panel {
+    box-sizing: border-box;
+    min-height: 44px;
+    line-height: 1.2;
+    vertical-align: middle;
+    font-family: inherit;
+}
+
+.panel-barra-acciones {
+    align-items: center;
+    gap: 12px;
+}
+
+.formulario-habitacion .panel-barra-acciones {
+    margin-bottom: 0;
+}
+
+/* HABITACIONES DINÁMICAS - WEB PÚBLICA */
+
+.seccion-habitaciones {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 65px 25px;
+}
+
+.seccion-habitaciones h2 {
+    color: #245c50;
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.seccion-habitaciones > p {
+    color: #52675d;
+    margin-bottom: 30px;
+}
+
+.habitaciones-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.habitacion-card {
+    background: white;
+    border: 1px solid #e1e8e3;
+    border-radius: 14px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.habitacion-card h3 {
+    color: #245c50;
+    font-size: 23px;
+}
+
+.habitacion-tipo {
+    font-weight: 600;
+    color: #52675d;
+}
+
+.habitacion-precio {
+    color: #245c50;
+    font-size: 21px;
+    font-weight: 700;
+    margin-top: auto;
+}
+
+.habitacion-card .btn-panel {
+    align-self: flex-start;
+}
+
+@media (max-width: 850px) {
+    .habitaciones-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* BUSCADOR DE DISPONIBILIDAD */
+
+.formulario-disponibilidad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) auto;
+    gap: 18px;
+    align-items: end;
+    background: white;
+    padding: 28px;
+    border: 1px solid #e1e8e3;
+    border-radius: 14px;
+    margin: 30px 0 45px;
+}
+
+.formulario-disponibilidad label {
+    display: block;
+    margin-bottom: 9px;
+    font-weight: 600;
+    color: #245c50;
+}
+
+.formulario-disponibilidad input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd8d1;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.formulario-disponibilidad .btn-panel {
+    min-height: 48px;
+}
+
+.disponibilidad-error {
+    background: #fde8e8;
+    color: #a12626;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.disponibilidad-etiqueta {
+    display: inline-block;
+    background: #e3f0e9;
+    color: #245c50;
+    padding: 9px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    align-self: flex-start;
+}
+
+@media (max-width: 900px) {
+    .formulario-disponibilidad {
+        grid-template-columns: 1fr;
+    }
+}
+
+.campo-formulario {
+    margin-bottom: 20px;
+}
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.campo-formulario input:not([type="checkbox"]) {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd8d1;
+    border-radius: 8px;
+}
+
+.campo-formulario input[type="checkbox"] {
+    width: auto;
+    margin-top: 8px;
+}
+
+.grupo-huesped {
+    margin-bottom: 16px;
+}
+
+/* =====================================
+   PANEL: MENÚ, BLOQUES DE ROL Y RECEPCIÓN
+===================================== */
+
+.panel-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 22px;
+    background: #245c50;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.panel-menu a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.panel-menu a:hover {
+    text-decoration: underline;
+}
+
+.panel-menu-salir {
+    margin-left: auto;
+}
+
+.panel-menu-salir button {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.panel-menu-salir button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.panel-bloque {
+    background: #f4f8f6;
+    border-radius: 14px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.panel-bloque h2 {
+    color: #245c50;
+    margin-bottom: 8px;
+}
+
+.panel-bloque h3 {
+    color: #245c50;
+    margin: 18px 0 4px;
+}
+
+.panel-bloque-admin {
+    border: 2px solid #245c50;
+}
+
+.panel-tarjetas-4 {
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 25px;
+}
+
+.panel-tarjeta small {
+    color: #52675d;
+}
+
+.panel-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.panel-ficha {
+    background: white;
+    border: 1px solid #e1e8e3;
+    border-radius: 12px;
+    padding: 22px;
+    margin: 20px 0;
+}
+
+.panel-ficha h3 {
+    color: #245c50;
+    margin-bottom: 12px;
+}
+
+.panel-ficha dl {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+}
+
+.panel-ficha dt {
+    font-weight: 600;
+    color: #52675d;
+}
+
+.panel-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 15px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.panel-filtros label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.panel-filtros input,
+.panel-filtros select {
+    padding: 10px;
+    border: 1px solid #ccd8d1;
+    border-radius: 7px;
+    font-family: inherit;
+}
+
+.panel-filtros ul.errorlist {
+    color: #a12626;
+    list-style: none;
+}
+
+.panel-filtros-botones {
+    display: flex;
+    gap: 10px;
+}
+
+.panel-paginacion {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.panel-mensaje-error {
+    background: #fde8e8;
+    color: #a12626;
+    border-left-color: #a12626;
+}
+
+.panel-barra-acciones form {
+    margin: 0;
+}
+
+.btn-panel-peligro {
+    background: #fde8e8;
+    color: #a12626;
+    border-color: #f3c4c4;
+}
+
+.btn-panel-peligro:hover {
+    background: #a12626;
+    color: #ffffff;
+}
+
+/* Etiquetas de estado */
+.etiqueta {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #e8f1ed;
+    color: #245c50;
+}
+
+.etiqueta-pendiente,
+.etiqueta-sit-llega_hoy { background: #fff4d6; color: #8a6100; }
+
+.etiqueta-confirmada,
+.etiqueta-sit-libre { background: #e3f0e9; color: #245c50; }
+
+.etiqueta-en-curso,
+.etiqueta-sit-ocupada { background: #dbe8fb; color: #1f4f8f; }
+
+.etiqueta-finalizada { background: #ececec; color: #555555; }
+
+.etiqueta-cancelada,
+.etiqueta-sit-fuera,
+.etiqueta-alerta { background: #fde8e8; color: #a12626; }
+
+@media (max-width: 768px) {
+    .panel-columnas,
+    .panel-tarjetas-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-menu-salir {
+        margin-left: 0;
+    }
+}
+
+.formulario-habitacion ul.errorlist {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 10px 14px;
+    background: #fde8e8;
+    color: #a12626;
+    border-left: 4px solid #a12626;
+    border-radius: 7px;
+    font-weight: 600;
+}
+
+/* Teléfono con prefijo +56 fijo */
+.campo-telefono {
+    display: flex;
+    align-items: stretch;
+}
+
+.prefijo-telefono {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: #e8f1ed;
+    color: #245c50;
+    font-weight: 600;
+    border: 1px solid #ccd8d1;
+    border-right: none;
+    border-radius: 7px 0 0 7px;
+}
+
+.campo-telefono input {
+    flex: 1;
+    border-radius: 0 7px 7px 0 !important;
+}
+
+/* Errores del formulario de huéspedes (panel), mismo estilo que los demás */
+.formulario-huesped {
+    align-items: flex-start;
+}
+
+.formulario-huesped .panel-filtros-botones {
+    align-self: flex-end;
+}
+
+.formulario-huesped-errores {
+    flex-basis: 100%;
+}
+
+.formulario-huesped ul.errorlist {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 10px 14px;
+    background: #fde8e8;
+    color: #a12626;
+    border-left: 4px solid #a12626;
+    border-radius: 7px;
+    font-weight: 600;
+    max-width: 260px;
+}
+
+.formulario-huesped-errores ul.errorlist {
+    max-width: none;
+    margin: 0;
+}
+
+/* Sugerencia de fechas alternativas */
+.sugerencias-fechas {
+    margin-top: 30px;
+}
+
+.sugerencias-fechas h2 {
+    color: #245c50;
+    margin-bottom: 8px;
+}
+
+.sugerencias-lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.sugerencia-card {
+    background: white;
+    border: 1px solid #e1e8e3;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.sugerencia-fechas {
+    font-size: 20px;
+    font-weight: 700;
+    color: #245c50;
+}
+
+@media (max-width: 768px) {
+    .sugerencias-lista {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Botón para mostrar u ocultar la contraseña */
+.campo-contrasena {
+    position: relative;
+}
+
+.campo-contrasena input {
+    padding-right: 48px;
+}
+
+.boton-ver-contrasena {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #52675d;
+    cursor: pointer;
+}
+
+.boton-ver-contrasena:hover {
+    background: #e8f1ed;
+    color: #245c50;
+}
+
+/* Formulario para crear recepcionistas */
+.formulario-personal {
+    max-width: none;
+    margin-top: 0;
+}
+
+.formulario-personal .campo-formulario {
+    margin-bottom: 16px;
+}
+
+.formulario-personal label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.ayuda-campo {
+    display: block;
+    margin-top: 6px;
+    color: #66756e;
+    font-size: 13px;
+}
+
+.ayuda-campo ul {
+    margin: 4px 0 0 18px;
+}
+
+/* Campos obligatorios y separación en la página de Personal */
+.obligatorio {
+    color: #a12626;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.nota-obligatorio {
+    font-size: 13px;
+    color: #66756e;
+    margin: 4px 0 16px;
+}
+
+.panel-intro {
+    margin-bottom: 35px;
+}
+
+/* Mi reserva (consulta y cancelación del cliente) */
+.formulario-consulta {
+    max-width: 520px;
+    margin-top: 0;
+}
+
+.formulario-consulta .campo-formulario {
+    margin-bottom: 16px;
+}
+
+.formulario-consulta label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.lista-huespedes {
+    list-style: none;
+    padding: 0;
+}
+
+.lista-huespedes li {
+    padding: 6px 0;
+    border-bottom: 1px solid #e1e8e3;
+}
+
+.casilla-confirmar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.casilla-confirmar input {
+    width: 18px;
+    height: 18px;
+}
+
+.nota-reserva {
+    background: #fff4d6;
+    color: #6b4e00;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.formulario-salir-reserva {
+    margin-top: 25px;
+}
+
+.boton-volver {
+    margin-top: 25px;
+}
+
+/* Menú del panel dentro del encabezado (arriba a la derecha) */
+.encabezado .panel-menu {
+    margin-bottom: 0;
+    padding: 10px 16px;
+    gap: 8px 20px;
+}
+
+.encabezado .panel-menu a {
+    font-size: 15px;
+}
+
+.encabezado .panel-menu-salir {
+    margin-left: 10px;
+}
+
+.encabezado .panel-menu-salir button {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+    .encabezado .navegacion {
+        flex-direction: column;
+    }
+}
+
+.etiqueta-sit-reservada {
+    background: #fff4d6;
+    color: #8a6100;
+}
+
+/* Combinaciones de habitaciones para grupos */
+.combinaciones-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.combinacion-card {
+    background: white;
+    border: 1px solid #e1e8e3;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.combinacion-card h3 {
+    color: #245c50;
+    margin-bottom: 12px;
+}
+
+.combinacion-habitaciones {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.combinacion-habitaciones li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e1e8e3;
+}
+
+.combinacion-total {
+    margin-top: 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #245c50;
+}

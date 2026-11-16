@@ -1,0 +1,76 @@
+
+{% extends 'web/base.html' %}
+
+{% block title %}Inicio | Hotel Ríos del Sur{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-contenido">
+        <span class="subtitulo">BIENVENIDOS AL SUR DE CHILE</span>
+
+        <h1>Tu descanso comienza aquí</h1>
+
+        <p>
+            Disfruta de una estadía cómoda y acogedora
+            en el Hotel Ríos del Sur.
+        </p>
+
+        <a href="{% url 'buscar_disponibilidad' %}"
+            class="btn-panel btn-panel-primario">
+            Consultar disponibilidad
+        </a>
+    </div>
+</section>
+
+<section id="habitaciones" class="seccion-habitaciones">
+
+    <h2>Nuestras habitaciones</h2>
+
+    <p>
+        Descubre nuestras habitaciones y encuentra
+        el espacio ideal para tu estadía.
+    </p>
+
+    <div class="habitaciones-grid">
+
+        {% for habitacion in habitaciones %}
+
+        <article class="habitacion-card">
+
+            <h3>Habitación {{ habitacion.numero }}</h3>
+
+            <p class="habitacion-tipo">
+                {{ habitacion.tipo }}
+            </p>
+
+            <p>{{ habitacion.descripcion }}</p>
+
+            <p>
+                <strong>Capacidad:</strong>
+                {{ habitacion.capacidad }} persona(s)
+            </p>
+
+            <p class="habitacion-precio">
+                ${{ habitacion.precio_noche }} CLP / noche
+            </p>
+
+            <a href="{% url 'buscar_disponibilidad' %}"
+                class="btn-panel btn-panel-primario">
+                Consultar disponibilidad
+            </a>
+
+        </article>
+
+        {% empty %}
+
+        <p>
+            Actualmente no hay habitaciones habilitadas.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+{% endblock %}

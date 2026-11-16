@@ -1,0 +1,203 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Personal | Panel{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    {% include 'panel/_menu.html' %}
+
+    <h1>Gestión del personal</h1>
+
+    <p class="panel-intro">
+        Desde aquí puedes crear cuentas de <strong>Recepcionista</strong> o
+        <strong>Administrador</strong> y activarlas o desactivarlas.
+        Solo el superusuario (Encargado de IoT) puede activar o desactivar administradores.
+    </p>
+
+    {% include 'panel/_mensajes.html' %}
+
+    <div class="panel-columnas">
+
+        <!-- Lista del personal -->
+        <div>
+            <h2>Personal</h2>
+
+            <table class="tabla-habitaciones">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Nombre</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in personal %}
+                        <tr>
+                            <td>{{ fila.usuario.username }}</td>
+                            <td>{{ fila.usuario.get_full_name|default:"—" }}</td>
+                            <td>{{ fila.rol }}</td>
+                            <td>
+                                {% if fila.usuario.is_active %}
+                                    <span class="etiqueta etiqueta-confirmada">Activa</span>
+                                {% else %}
+                                    <span class="etiqueta etiqueta-cancelada">Desactivada</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if fila.puede_cambiar %}
+                                    <form method="post"
+                                          action="{% url 'cambiar_estado_recepcionista' fila.usuario.pk %}">
+                                        {% csrf_token %}
+                                        {% if fila.usuario.is_active %}
+                                            <button type="submit"
+                                                    class="btn-panel btn-panel-peligro btn-panel-pequeno">
+                                                Desactivar
+                                            </button>
+                                        {% else %}
+                                            <button type="submit"
+                                                    class="btn-panel btn-panel-secundario btn-panel-pequeno">
+                                                Activar
+                                            </button>
+                                        {% endif %}
+                                    </form>
+                                {% elif fila.usuario == request.user %}
+                                    <small>Tu cuenta</small>
+                                {% elif fila.usuario.is_superuser %}
+                                    <small>Cuenta principal</small>
+                                {% else %}
+                                    <small>Solo administrador principal</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="5">Todavía no hay personal registrado.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Crear cuenta -->
+        <div>
+            <h2>Nueva cuenta del personal</h2>
+
+            <form method="post" class="formulario-habitacion formulario-personal" novalidate>
+                {% csrf_token %}
+
+                {{ formulario.non_field_errors }}
+
+                {% for campo in formulario %}
+                    <div class="campo-formulario">
+                        <label for="{{ campo.id_for_label }}">
+                            {{ campo.label }}
+                            {% if campo.field.required %}
+                                <span class="obligatorio">*</span>
+                            {% endif %}
+                        </label>
+
+                        {% if 'password' in campo.name %}
+                            <div class="campo-contrasena">
+                                {{ campo }}
+
+                                <button type="button"
+                                        class="boton-ver-contrasena"
+                                        aria-label="Mostrar contraseña"
+                                        title="Mostrar contraseña">
+                                    <svg class="icono-ojo" viewBox="0 0 24 24" width="20" height="20"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    <svg class="icono-ojo-tachado" viewBox="0 0 24 24" width="20" height="20"
+                                         fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 19c-7 0-11-7-11-7a18.45 18.45 0 0 1 5.06-5.94"/>
+                                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 7 11 7a18.5 18.5 0 0 1-2.16 3.19"/>
+                                        <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+                                        <line x1="1" y1="1" x2="23" y2="23"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        {% else %}
+                            {{ campo }}
+                        {% endif %}
+
+                        {{ campo.errors }}
+                    </div>
+                {% endfor %}
+
+                <p class="nota-obligatorio">
+                    <span class="obligatorio">*</span> Campos obligatorios
+                </p>
+
+                <button type="submit" class="btn-panel btn-panel-primario">
+                    Crear cuenta
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Auditoría -->
+    <div class="panel-bloque">
+        <h3>Últimos cambios en cuentas de usuario (auditoría)</h3>
+
+        <table class="tabla-habitaciones">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Realizado por</th>
+                    <th>Cuenta</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for accion in acciones %}
+                    <tr>
+                        <td>{{ accion.action_time|date:"d/m/Y H:i" }}</td>
+                        <td>{{ accion.user.username }}</td>
+                        <td>{{ accion.object_repr }}</td>
+                        <td>{{ accion.get_change_message|default:"—" }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">Sin cambios registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<script>
+// Botón del ojo: muestra u oculta cada campo de contraseña
+document.querySelectorAll('.boton-ver-contrasena').forEach(function (boton) {
+    const campo = boton.parentElement.querySelector('input');
+    const ojo = boton.querySelector('.icono-ojo');
+    const ojoTachado = boton.querySelector('.icono-ojo-tachado');
+
+    boton.addEventListener('click', function () {
+        const mostrar = campo.type === 'password';
+
+        campo.type = mostrar ? 'text' : 'password';
+        ojo.style.display = mostrar ? 'none' : '';
+        ojoTachado.style.display = mostrar ? '' : 'none';
+
+        const texto = mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña';
+        boton.setAttribute('aria-label', texto);
+        boton.title = texto;
+
+        campo.focus();
+    });
+
+    // Por seguridad, se vuelven a ocultar al enviar el formulario
+    campo.form.addEventListener('submit', function () {
+        campo.type = 'password';
+    });
+});
+</script>
+
+{% endblock %}

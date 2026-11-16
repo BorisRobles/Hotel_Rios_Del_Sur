@@ -1,0 +1,35 @@
+{% extends 'web/base.html' %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    <h1>{{ titulo }}</h1>
+
+    <form method="post" class="formulario-habitacion" novalidate>
+        {% csrf_token %}
+
+        {{ formulario.as_p }}
+
+        <div class="panel-barra-acciones">
+
+            <button type="submit"
+                    class="btn-panel btn-panel-primario">
+                Guardar habitación
+            </button>
+
+            <a href="{% url 'lista_habitaciones' %}"
+            class="btn-panel btn-panel-secundario">
+                Cancelar
+            </a>
+
+        </div>
+
+       
+    </form>
+
+</section>
+
+{% endblock %}

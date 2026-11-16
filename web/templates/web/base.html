@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hotel Ríos del Sur{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'web/css/estilos.css' %}">
+</head>
+<body>
+
+    <header class="encabezado">
+        <nav class="navegacion">
+            <a href="{% url 'inicio' %}" class="logo">
+                Hotel Ríos del Sur
+            </a>
+
+            {% if request.path|slice:":7" == "/panel/" %}
+            {% include 'panel/_menu.html' with en_encabezado=True %}
+            {% else %}
+            <div class="enlaces">
+                <a href="{% url 'inicio' %}">Inicio</a>
+                <a href="{% url 'inicio' %}#habitaciones">Habitaciones</a>
+                <a href="{% url 'buscar_disponibilidad' %}">Reservar</a>
+                <a href="{% url 'mi_reserva' %}">Mi Reserva</a>
+                <a href="{% url 'login' %}">Iniciar Sesión</a>
+            </div>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="pie">
+        <p>© Hotel Ríos del Sur - 2026</p>
+    </footer>
+
+</body>
+</html>

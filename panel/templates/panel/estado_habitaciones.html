@@ -1,0 +1,61 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Ocupación de habitaciones | Panel{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    {% include 'panel/_menu.html' %}
+
+    <h1>Ocupación de habitaciones</h1>
+    <p>Situación al {{ hoy|date:"d/m/Y" }}</p>
+
+    <div class="panel-tarjetas panel-tarjetas-4">
+        <div class="panel-tarjeta"><h3>Ocupadas</h3><p>{{ resumen.ocupada }}</p></div>
+        <div class="panel-tarjeta"><h3>Reservadas para hoy</h3><p>{{ resumen.reservada }}</p></div>
+        <div class="panel-tarjeta"><h3>Libres</h3><p>{{ resumen.libre }}</p></div>
+        <div class="panel-tarjeta"><h3>En Mantenimiento</h3><p>{{ resumen.fuera }}</p></div>
+    </div>
+
+    <table class="tabla-habitaciones">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Tipo</th>
+                <th>Capacidad</th>
+                <th>Situación</th>
+                <th>Huésped / Reserva</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in filas %}
+                <tr>
+                    <td>{{ fila.habitacion.numero }}</td>
+                    <td>{{ fila.habitacion.tipo }}</td>
+                    <td>{{ fila.habitacion.capacidad }}</td>
+                    <td><span class="etiqueta etiqueta-sit-{{ fila.situacion }}">{{ fila.etiqueta }}</span></td>
+                    <td>
+                        {% if fila.reserva %}
+                            <a href="{% url 'detalle_reserva' fila.reserva.pk %}">
+                                {{ fila.reserva.cliente }} ({{ fila.reserva.codigo_reserva }})
+                            </a>
+                            {% if fila.situacion == 'ocupada' %}
+                                <br><small>Salida {{ fila.reserva.fecha_salida|date:"d/m/Y" }}</small>
+                            {% elif fila.situacion == 'reservada' %}
+                                <br><small>Llegada: {{ fila.reserva.fecha_entrada|date:"d/m/Y" }} · Salida: {{ fila.reserva.fecha_salida|date:"d/m/Y" }}</small>
+                            {% endif %}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No hay habitaciones registradas.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</section>
+
+{% endblock %}

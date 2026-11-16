@@ -1,0 +1,234 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Panel de gestión | Hotel Ríos del Sur{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    {% include 'panel/_menu.html' %}
+
+    <div class="panel-encabezado">
+        <h1>Panel de gestión</h1>
+
+        <p>
+            Bienvenido,
+            {{ request.user.first_name|default:request.user.username }}
+            · {{ hoy|date:"l d \d\e F \d\e Y" }}
+        </p>
+
+        {% if es_administrador %}
+            <span class="panel-rol">Administrador del hotel</span>
+        {% else %}
+            <span class="panel-rol">Recepcionista</span>
+        {% endif %}
+    </div>
+
+    {% include 'panel/_mensajes.html' %}
+
+    <div class="panel-tarjetas panel-tarjetas-4">
+
+        <div class="panel-tarjeta">
+            <h3>Habitaciones ocupadas</h3>
+            <p>{{ habitaciones_ocupadas }}</p>
+        </div>
+
+        <div class="panel-tarjeta">
+            <h3>Reservadas para hoy</h3>
+            <p>{{ habitaciones_reservadas }}</p>
+        </div>
+
+        <div class="panel-tarjeta">
+            <h3>Habitaciones libres</h3>
+            <p>{{ habitaciones_libres }}</p>
+        </div>
+
+        <div class="panel-tarjeta">
+            <h3>En mantenimiento</h3>
+            <p>{{ habitaciones_mantenimiento }}</p>
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         BLOQUE DEL RECEPCIONISTA
+         (lo ven recepcionistas y administradores)
+    ========================================== -->
+    <div class="panel-bloque">
+        <h2>Recepción</h2>
+
+        <div class="panel-barra-acciones">
+            <a href="{% url 'lista_reservas' %}"
+               class="btn-panel btn-panel-primario">
+                Buscar y gestionar reservas
+            </a>
+
+            <a href="{% url 'estado_habitaciones' %}"
+               class="btn-panel btn-panel-secundario">
+                Ver ocupación de habitaciones
+            </a>
+
+            {% if not es_administrador %}
+            <a href="{% url 'panel_disponibilidad' %}"
+                class="btn-panel btn-panel-secundario">
+                Consultar disponibilidad / nueva reserva
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="panel-columnas">
+
+            <div>
+                <h3>Llegadas de hoy (check-in)</h3>
+
+                <table class="tabla-habitaciones">
+                    <thead>
+                        <tr>
+                            <th>Hab.</th>
+                            <th>Cliente</th>
+                            <th>Código</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in llegadas_hoy %}
+                            <tr>
+                                <td>{{ reserva.habitacion.numero }}</td>
+                                <td>{{ reserva.cliente }}</td>
+                                <td>{{ reserva.codigo_reserva }}</td>
+                                <td>
+                                    <a href="{% url 'detalle_reserva' reserva.pk %}"
+                                       class="btn-panel btn-panel-secundario btn-panel-pequeno">
+                                        Atender
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="4">No hay llegadas para hoy.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h3>Salidas pendientes (check-out)</h3>
+
+                <table class="tabla-habitaciones">
+                    <thead>
+                        <tr>
+                            <th>Hab.</th>
+                            <th>Cliente</th>
+                            <th>Salida</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reserva in salidas_hoy %}
+                            <tr>
+                                <td>{{ reserva.habitacion.numero }}</td>
+                                <td>{{ reserva.cliente }}</td>
+                                <td>
+                                    {{ reserva.fecha_salida|date:"d/m/Y" }}
+                                    {% if reserva.fecha_salida < hoy %}
+                                        <span class="etiqueta etiqueta-alerta">Atrasada</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'detalle_reserva' reserva.pk %}"
+                                       class="btn-panel btn-panel-secundario btn-panel-pequeno">
+                                        Atender
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr><td colspan="4">No hay salidas pendientes.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================================
+         BLOQUE DEL ADMINISTRADOR
+         (solo administradores del hotel)
+    ========================================== -->
+    {% if es_administrador %}
+    <div class="panel-bloque panel-bloque-admin">
+        <h2>Administración</h2>
+
+        <div class="panel-tarjetas panel-tarjetas-4">
+            <div class="panel-tarjeta">
+                <h3>Ocupación actual</h3>
+                <p>{{ porcentaje_ocupacion }}%</p>
+            </div>
+
+            <div class="panel-tarjeta">
+                <h3>Reservas del mes</h3>
+                <p>{{ reservas_mes }}</p>
+                <small>{{ canceladas_mes }} canceladas</small>
+            </div>
+
+            <div class="panel-tarjeta">
+                <h3>Ingresos pagados del mes</h3>
+                <p>${{ ingresos_mes }}</p>
+            </div>
+
+            <div class="panel-tarjeta">
+                <h3>Por cobrar</h3>
+                <p>${{ pagos_pendientes }}</p>
+            </div>
+        </div>
+
+        <div class="panel-barra-acciones">
+            <a href="{% url 'lista_habitaciones' %}"
+               class="btn-panel btn-panel-primario">
+                Administrar habitaciones
+            </a>
+
+            <a href="{% url 'agregar_habitacion' %}"
+               class="btn-panel btn-panel-secundario">
+                + Agregar habitación
+            </a>
+
+                        <a href="{% url 'lista_personal' %}"
+               class="btn-panel btn-panel-secundario">
+                Gestionar personal
+            </a>
+        </div>
+
+        <h3>Últimas acciones del personal (auditoría)</h3>
+
+        <table class="tabla-habitaciones">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Reserva</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for accion in ultimas_acciones %}
+                    <tr>
+                        <td>{{ accion.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ accion.usuario.username|default:"Web (cliente)" }}</td>
+                        <td>
+                            <a href="{% url 'detalle_reserva' accion.reserva.pk %}">
+                                {{ accion.reserva.codigo_reserva }}
+                            </a>
+                        </td>
+                        <td>{{ accion.accion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4">Todavía no hay acciones registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

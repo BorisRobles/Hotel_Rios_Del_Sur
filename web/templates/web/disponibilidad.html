@@ -1,0 +1,257 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Disponibilidad | Hotel Ríos del Sur{% endblock %}
+
+{% block content %}
+
+<section class="seccion-habitaciones">
+
+    <h1>Consulta de disponibilidad</h1>
+
+    <p>
+        Selecciona tus fechas y encuentra la habitación
+        ideal para tu estadía.
+    </p>
+
+    <form method="get"
+          action="{% if en_panel %}{% url 'panel_disponibilidad' %}{% else %}{% url 'buscar_disponibilidad' %}{% endif %}"
+          class="formulario-disponibilidad">
+
+        <div>
+            <label for="entrada">Fecha de entrada</label>
+            <input type="date"
+                   id="entrada"
+                   name="entrada"
+                   value="{{ entrada }}"
+                   required>
+        </div>
+
+        <div>
+            <label for="salida">Fecha de salida</label>
+            <input type="date"
+                   id="salida"
+                   name="salida"
+                   value="{{ salida }}"
+                   required>
+        </div>
+
+        <div>
+            <label for="personas">Personas</label>
+            <input type="number"
+                   id="personas"
+                   name="personas"
+                   min="1"
+                   value="{{ personas|default:'1' }}"
+                   required>
+        </div>
+
+        <button type="submit"
+                class="btn-panel btn-panel-primario">
+            Buscar habitaciones
+        </button>
+
+    </form>
+
+    {% if error %}
+        <p class="disponibilidad-error">
+            {{ error }}
+        </p>
+    {% endif %}
+
+    {% if busqueda_realizada and not error %}
+
+        {% if habitaciones %}
+
+            <h2>Habitaciones disponibles</h2>
+
+            <div class="habitaciones-grid">
+
+                {% for habitacion in habitaciones %}
+
+                    <article class="habitacion-card">
+
+                        <h3>Habitación {{ habitacion.numero }}</h3>
+
+                        <p class="habitacion-tipo">
+                            {{ habitacion.tipo }}
+                        </p>
+
+                        <p>{{ habitacion.descripcion }}</p>
+
+                        <p>
+                            <strong>Capacidad:</strong>
+                            {{ habitacion.capacidad }} persona(s)
+                        </p>
+
+                        <p class="habitacion-precio">
+                            ${{ habitacion.precio_noche }} CLP / noche
+                        </p>
+
+                        <span class="disponibilidad-etiqueta">
+                            Disponible para tus fechas
+                        </span>
+
+                        <a href="{% if en_panel %}{% url 'panel_reservar' habitacion.pk %}{% else %}{% url 'reservar_habitacion' habitacion.pk %}{% endif %}?entrada={{ entrada|urlencode }}&salida={{ salida|urlencode }}&personas={{ personas|urlencode }}"
+                            class="btn-panel btn-panel-primario">
+                                Reservar habitación
+                        </a>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+        
+                {% elif combinaciones %}
+
+            <p class="disponibilidad-error">
+                No hay una sola habitación para {{ personas }} personas en esas fechas,
+                pero puedes reservar varias habitaciones a la vez.
+            </p>
+
+            <div class="sugerencias-fechas">
+
+                <h2>Combinaciones disponibles para tu grupo</h2>
+
+                <p>
+                    Cada habitación se reserva por separado con los mismos datos de quien reserva.
+                    En las habitaciones donde no te alojes, desmarca
+                    <em>"La persona que realiza la reserva también se alojará"</em>
+                    y escribe los datos de los huéspedes.
+                </p>
+
+                <div class="combinaciones-lista">
+
+                    {% for opcion in combinaciones %}
+
+                        <article class="combinacion-card">
+
+                            <h3>Opción {{ forloop.counter }}</h3>
+
+                            <ul class="combinacion-habitaciones">
+                                {% for item in opcion.habitaciones %}
+                                    <li>
+                                        <div>
+                                            <strong>Habitación {{ item.habitacion.numero }}</strong>
+                                            · {{ item.habitacion.tipo }}<br>
+                                            <small>
+                                                {{ item.personas }} persona{{ item.personas|pluralize }}
+                                                (capacidad {{ item.habitacion.capacidad }})
+                                                · ${{ item.precio }}
+                                            </small>
+                                        </div>
+
+                                        <a href="{% if en_panel %}{% url 'panel_reservar' item.habitacion.pk %}{% else %}{% url 'reservar_habitacion' item.habitacion.pk %}{% endif %}?entrada={{ entrada|urlencode }}&salida={{ salida|urlencode }}&personas={{ item.personas }}"
+                                           target="_blank" rel="noopener"
+                                           class="btn-panel btn-panel-primario btn-panel-pequeno">
+                                            Reservar
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <p class="combinacion-total">
+                                Total: ${{ opcion.total }} CLP
+                                <small>({{ opcion.noches }} noche{{ opcion.noches|pluralize }})</small>
+                            </p>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+                <p class="nota-reserva">
+                    Cada botón "Reservar" se abre en una pestaña nueva, para que no pierdas esta lista
+                    mientras reservas las demás habitaciones.
+                </p>
+
+            </div>
+
+    
+        {% elif sin_capacidad %}
+
+            <p class="disponibilidad-error">
+                No tenemos habitaciones suficientes para {{ personas }} personas
+                en esas fechas, ni combinando habitaciones. Prueba con otras fechas
+                o con menos personas.
+            </p>
+
+        {% else %}
+
+            <p class="disponibilidad-error">
+                No quedan habitaciones disponibles para las fechas seleccionadas.
+            </p>
+
+            {% if sugerencias %}
+
+                <div class="sugerencias-fechas">
+
+                    <h2>Fechas alternativas con disponibilidad</h2>
+
+                    <p>
+                        Estas fechas están cerca de las que buscabas y mantienen
+                        la misma cantidad de noches y de personas:
+                    </p>
+
+                    <div class="sugerencias-lista">
+
+                        {% for sugerencia in sugerencias %}
+
+                            <article class="sugerencia-card">
+
+                                <p class="sugerencia-fechas">
+                                    {{ sugerencia.entrada|date:"D d/m" }}
+                                    →
+                                    {{ sugerencia.salida|date:"D d/m" }}
+                                </p>
+
+                                <p>
+                                    {{ sugerencia.noches }} noche{{ sugerencia.noches|pluralize }}
+                                    ·
+                                    {{ sugerencia.dias }}
+                                    día{{ sugerencia.dias|pluralize }}
+                                    {{ sugerencia.cuando }}
+                                </p>
+
+                                <span class="disponibilidad-etiqueta">
+                                    {{ sugerencia.libres }}
+                                    habitaci{{ sugerencia.libres|pluralize:"ón,ones" }}
+                                    libre{{ sugerencia.libres|pluralize }}
+                                </span>
+
+                                <a href="{% if en_panel %}{% url 'panel_disponibilidad' %}{% else %}{% url 'buscar_disponibilidad' %}{% endif %}?entrada={{ sugerencia.entrada|date:'Y-m-d' }}&salida={{ sugerencia.salida|date:'Y-m-d' }}&personas={{ personas|urlencode }}"
+                                   class="btn-panel btn-panel-primario">
+                                    Ver habitaciones
+                                </a>
+
+                            </article>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <p>
+                    Tampoco encontramos fechas cercanas con disponibilidad
+                    (30 días antes o después). Contáctanos para ayudarte.
+                </p>
+
+            {% endif %}
+
+        {% endif %}
+
+    {% endif %}
+
+</section>
+
+<script>
+if (window.location.search) {
+    history.replaceState(null, '', window.location.pathname);
+}
+</script>
+
+{% endblock %}

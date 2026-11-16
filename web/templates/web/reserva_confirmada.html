@@ -1,0 +1,55 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Reserva confirmada{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    <h1>¡Reserva confirmada!</h1>
+
+    <div class="panel-mensaje">
+        Tu reserva fue registrada correctamente.
+    </div>
+
+    <h2>Código de reserva</h2>
+    <p><strong>{{ reserva.codigo_reserva }}</strong></p>
+
+    <p class="nota-reserva">
+        Guarda este código. Con él y tu RUT puedes consultar o cancelar
+        tu reserva en <a href="{% url 'mi_reserva' %}">Mi reserva</a>.
+    </p>
+
+    <p>
+        <strong>Habitación:</strong>
+        {{ reserva.habitacion.numero }}
+    </p>
+
+    <p>
+        <strong>Entrada:</strong>
+        {{ reserva.fecha_entrada }}
+    </p>
+
+    <p>
+        <strong>Salida:</strong>
+        {{ reserva.fecha_salida }}
+    </p>
+
+    <p>
+        <strong>Total:</strong>
+        ${{ reserva.precio_total }} CLP
+    </p>
+
+    <p>
+        <strong>Estado del pago:</strong>
+        {{ reserva.estado_pago_mostrar }}
+    </p>
+
+    <a href="{% url 'inicio' %}"
+       class="btn-panel btn-panel-primario boton-volver">
+        Volver al inicio
+    </a>
+
+</section>
+
+{% endblock %}

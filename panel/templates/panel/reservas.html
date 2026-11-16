@@ -1,0 +1,85 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Reservas | Panel{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    {% include 'panel/_menu.html' %}
+
+    <h1>Reservas</h1>
+
+    {% include 'panel/_mensajes.html' %}
+
+    <form method="get" class="panel-filtros">
+        {% for campo in filtros %}
+            <div>
+                <label for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+                {{ campo }}
+            </div>
+        {% endfor %}
+
+        <div class="panel-filtros-botones">
+            <button type="submit" class="btn-panel btn-panel-primario">Filtrar</button>
+            <a href="{% url 'lista_reservas' %}" class="btn-panel btn-panel-secundario">Limpiar</a>
+        </div>
+    </form>
+
+    <table class="tabla-habitaciones">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Cliente</th>
+                <th>Hab.</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Estado</th>
+                <th>Pago</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in pagina %}
+                <tr>
+                    <td>{{ reserva.codigo_reserva }}</td>
+                    <td>{{ reserva.cliente }}<br><small>{{ reserva.cliente.documento }}</small></td>
+                    <td>{{ reserva.habitacion.numero }}</td>
+                    <td>{{ reserva.fecha_entrada|date:"d/m/Y" }}</td>
+                    <td>{{ reserva.fecha_salida|date:"d/m/Y" }}</td>
+                    <td>
+                        <span class="etiqueta etiqueta-{{ reserva.estado.nombre|slugify }}">
+                            {{ reserva.estado }}
+                        </span>
+                    </td>
+                    <td>{{ reserva.estado_pago_mostrar }}</td>
+                    <td>
+                        <a href="{% url 'detalle_reserva' reserva.pk %}"
+                           class="btn-panel btn-panel-secundario btn-panel-pequeno">
+                            Ver
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="8">No se encontraron reservas.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if pagina.paginator.num_pages > 1 %}
+        <div class="panel-paginacion">
+            {% if pagina.has_previous %}
+                <a href="?{{ parametros }}&pagina={{ pagina.previous_page_number }}">« Anterior</a>
+            {% endif %}
+
+            <span>Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+
+            {% if pagina.has_next %}
+                <a href="?{{ parametros }}&pagina={{ pagina.next_page_number }}">Siguiente »</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if messages %}
+    {% for message in messages %}
+        <div class="panel-mensaje {% if message.tags == 'error' %}panel-mensaje-error{% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}

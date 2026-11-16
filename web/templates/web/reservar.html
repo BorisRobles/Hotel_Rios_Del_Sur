@@ -1,0 +1,132 @@
+
+{% extends 'web/base.html' %}
+
+{% block title %}Reservar habitación{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    <h1>Reservar habitación {{ habitacion.numero }}</h1>
+
+    <p><strong>Tipo:</strong> {{ habitacion.tipo }}</p>
+    <p>
+        <strong>Precio por noche:</strong>
+        ${{ habitacion.precio_noche }} CLP
+    </p>
+
+    <form method="post" class="formulario-habitacion" novalidate>
+        {% csrf_token %}
+
+        <input type="hidden" name="entrada" value="{{ entrada }}">
+        <input type="hidden" name="salida" value="{{ salida }}">
+        <input type="hidden" name="personas" value="{{ personas }}">
+
+        <h2>Datos del cliente</h2>
+
+        <div id="campos-reserva">
+
+            {% for campo in formulario %}
+
+                <div class="campo-formulario
+                    {% if campo.name|slice:':8' == 'huesped_' %}grupo-huesped{% endif %}">
+
+                    {{ campo.label_tag }}
+                    {{ campo }}
+                    {{ campo.errors }}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        {{ formulario.non_field_errors }}
+
+        <div class="panel-barra-acciones">
+
+            <button type="submit"
+                    class="btn-panel btn-panel-primario">
+                Confirmar reserva
+            </button>
+
+            <a href="{% if en_panel %}{% url 'panel_disponibilidad' %}{% else %}{% url 'buscar_disponibilidad' %}{% endif %}"
+               class="btn-panel btn-panel-secundario">
+                Volver
+            </a>
+
+        </div>
+
+    </form>
+
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Casilla: el cliente también se alojará
+    const checkbox = document.getElementById(
+        'id_cliente_es_huesped'
+    );
+
+    // Cantidad de personas seleccionada
+    const cantidadPersonas = Number(
+        '{{ personas|escapejs }}'
+    );
+
+    // Campos de los huéspedes
+    const grupos = document.querySelectorAll(
+        '.grupo-huesped'
+    );
+
+    function actualizarHuespedes() {
+
+        const adicionales = checkbox.checked
+            ? cantidadPersonas - 1
+            : cantidadPersonas;
+
+        grupos.forEach(function (grupo) {
+
+            // Obtener número del huésped desde el input
+            const inputHuesped = grupo.querySelector(
+                '[data-huesped]'
+            );
+
+            if (!inputHuesped) {
+                return;
+            }
+
+            const numero = Number(
+                inputHuesped.dataset.huesped
+            );
+
+            const mostrar = numero <= adicionales;
+
+            // Mostrar u ocultar campos
+            grupo.style.display = mostrar ? '' : 'none';
+
+            // Desactivar los campos ocultos
+            grupo.querySelectorAll('input').forEach(function (input) {
+                input.disabled = !mostrar;
+            });
+
+        });
+    }
+
+    checkbox.addEventListener(
+        'change',
+        actualizarHuespedes
+    );
+
+    actualizarHuespedes();
+
+});
+</script>
+
+<script>
+if (window.location.search) {
+    history.replaceState(null, '', window.location.pathname);
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Reserva {{ reserva.codigo_reserva }} | Panel{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    {% include 'panel/_menu.html' %}
+
+    <h1>Reserva {{ reserva.codigo_reserva }}</h1>
+
+    <p>
+        <span class="etiqueta etiqueta-{{ reserva.estado.nombre|slugify }}">{{ reserva.estado }}</span>
+        <span class="etiqueta">Pago: {{ reserva.estado_pago_mostrar }}</span>
+    </p>
+
+    {% include 'panel/_mensajes.html' %}
+
+    <!-- Acciones de recepción -->
+    {% if perms.reservas.change_reserva %}
+    <div class="panel-barra-acciones">
+
+        {% if puede_checkin %}
+            <form method="post" action="{% url 'checkin_reserva' reserva.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-panel btn-panel-primario">Hacer check-in</button>
+            </form>
+        {% endif %}
+
+        {% if puede_pagar %}
+            <form method="post" action="{% url 'pagar_reserva' reserva.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-panel btn-panel-secundario">
+                    Registrar pago (${{ reserva.precio_total }})
+                </button>
+            </form>
+        {% endif %}
+
+        {% if puede_checkout %}
+            <form method="post" action="{% url 'checkout_reserva' reserva.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-panel btn-panel-primario">Hacer check-out</button>
+            </form>
+        {% endif %}
+
+        {% if puede_cancelar %}
+            <form method="post" action="{% url 'cancelar_reserva' reserva.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-panel btn-panel-peligro">Cancelar reserva</button>
+            </form>
+        {% endif %}
+
+        <a href="{% url 'lista_reservas' %}" class="btn-panel btn-panel-secundario">Volver</a>
+    </div>
+    {% endif %}
+
+    <div class="panel-columnas">
+
+        <div class="panel-ficha">
+            <h3>Estadía</h3>
+            <dl>
+                <dt>Habitación</dt>
+                <dd>{{ reserva.habitacion.numero }} - {{ reserva.habitacion.tipo }}</dd>
+                <dt>Entrada</dt>
+                <dd>{{ reserva.fecha_entrada|date:"d/m/Y" }}</dd>
+                <dt>Salida</dt>
+                <dd>{{ reserva.fecha_salida|date:"d/m/Y" }} ({{ noches }} noche{{ noches|pluralize }})</dd>
+                <dt>Personas</dt>
+                <dd>{{ reserva.cantidad_personas }}</dd>
+                <dt>Total</dt>
+                <dd>${{ reserva.precio_total }}</dd>
+                <dt>Creada</dt>
+                <dd>{{ reserva.fecha_creacion|date:"d/m/Y H:i" }}</dd>
+            </dl>
+        </div>
+
+        <div class="panel-ficha">
+            <h3>Cliente (quien reserva)</h3>
+            <dl>
+                <dt>Nombre</dt>
+                <dd>{{ reserva.cliente }}</dd>
+                <dt>Documento</dt>
+                <dd>{{ reserva.cliente.documento }}</dd>
+                <dt>Teléfono</dt>
+                <dd>{{ reserva.cliente.telefono }}</dd>
+                <dt>Correo</dt>
+                <dd>{{ reserva.cliente.correo }}</dd>
+            </dl>
+        </div>
+
+    </div>
+
+    <!-- Registro de huéspedes -->
+    <div class="panel-bloque">
+        <h3>Huéspedes ({{ total_huespedes }} de {{ reserva.cantidad_personas }})</h3>
+
+        <table class="tabla-habitaciones">
+            <thead>
+                <tr><th>Nombre</th><th>Apellido</th><th>Documento</th></tr>
+            </thead>
+            <tbody>
+                {% for huesped in huespedes %}
+                    <tr>
+                        <td>{{ huesped.nombre }}</td>
+                        <td>{{ huesped.apellido }}</td>
+                        <td>{{ huesped.documento }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="3">Sin huéspedes registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if puede_agregar_huesped and perms.reservas.add_huesped %}
+            <form method="post"
+                  action="{% url 'agregar_huesped' reserva.pk %}"
+                  class="panel-filtros formulario-huesped"
+                  novalidate>
+                {% csrf_token %}
+
+                {% if formulario_huesped.non_field_errors %}
+                    <div class="formulario-huesped-errores">
+                        {{ formulario_huesped.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for campo in formulario_huesped %}
+                    <div>
+                        <label for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+                        {{ campo }}
+                        {{ campo.errors }}
+                    </div>
+                {% endfor %}
+                <div class="panel-filtros-botones">
+                    <button type="submit" class="btn-panel btn-panel-primario">Registrar huésped</button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+
+    <!-- Historial / auditoría -->
+    <div class="panel-bloque">
+        <h3>Historial de la reserva</h3>
+
+        <table class="tabla-habitaciones">
+            <thead>
+                <tr><th>Fecha</th><th>Usuario</th><th>Acción</th></tr>
+            </thead>
+            <tbody>
+                {% for accion in historial %}
+                    <tr>
+                        <td>{{ accion.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ accion.usuario.username|default:"Web (cliente)" }}</td>
+                        <td>{{ accion.accion }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="3">Sin movimientos registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}

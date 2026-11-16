@@ -1,0 +1,128 @@
+{% extends 'web/base.html' %}
+
+{% block title %}Mi reserva | Hotel Ríos del Sur{% endblock %}
+
+{% block content %}
+
+<section class="panel-hotel">
+
+    <h1>Mi reserva</h1>
+
+    {% include 'panel/_mensajes.html' %}
+
+    {% if reserva %}
+
+        <!-- ===== Detalle de la reserva ===== -->
+        <p>
+            <span class="etiqueta etiqueta-{{ reserva.estado.nombre|slugify }}">{{ reserva.estado }}</span>
+            <span class="etiqueta">Pago: {{ reserva.estado_pago_mostrar }}</span>
+        </p>
+
+        <div class="panel-columnas">
+
+            <div class="panel-ficha">
+                <h3>Reserva {{ reserva.codigo_reserva }}</h3>
+                <dl>
+                    <dt>A nombre de</dt>
+                    <dd>{{ reserva.cliente }}</dd>
+                    <dt>Habitación</dt>
+                    <dd>{{ reserva.habitacion.numero }} - {{ reserva.habitacion.tipo }}</dd>
+                    <dt>Entrada</dt>
+                    <dd>{{ reserva.fecha_entrada|date:"l d/m/Y" }}</dd>
+                    <dt>Salida</dt>
+                    <dd>{{ reserva.fecha_salida|date:"l d/m/Y" }} ({{ noches }} noche{{ noches|pluralize }})</dd>
+                    <dt>Personas</dt>
+                    <dd>{{ reserva.cantidad_personas }}</dd>
+                    <dt>Total</dt>
+                    <dd>${{ reserva.precio_total }} CLP</dd>
+                </dl>
+            </div>
+
+            <div class="panel-ficha">
+                <h3>Huéspedes</h3>
+                <ul class="lista-huespedes">
+                    {% for huesped in huespedes %}
+                        <li>{{ huesped.nombre }} {{ huesped.apellido }}</li>
+                    {% empty %}
+                        <li>Sin huéspedes registrados.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- ===== Cancelación ===== -->
+        {% if puede_cancelar %}
+            <div class="panel-bloque">
+                <h3>Cancelar reserva</h3>
+                <p>
+                    Puedes cancelar tu reserva hasta el día anterior a la llegada.
+                </p>
+
+                <form method="post" action="{% url 'cancelar_mi_reserva' %}" novalidate>
+                    {% csrf_token %}
+
+                    <label class="casilla-confirmar">
+                        {{ formulario_cancelar.confirmar }}
+                        {{ formulario_cancelar.confirmar.label }}
+                    </label>
+
+                    <button type="submit" class="btn-panel btn-panel-peligro">
+                        Cancelar reserva
+                    </button>
+                </form>
+            </div>
+        {% elif reserva.estado.nombre == 'Pendiente' or reserva.estado.nombre == 'Confirmada' %}
+            <p class="nota-reserva">
+                Tu llegada es hoy o ya pasó, por lo que la reserva no se puede cancelar en línea.
+                Si necesitas ayuda, comunícate con recepción.
+            </p>
+        {% endif %}
+
+        <form method="post" class="formulario-salir-reserva">
+            {% csrf_token %}
+            <button type="submit" name="salir" class="btn-panel btn-panel-secundario">
+                Consultar otra reserva
+            </button>
+        </form>
+
+    {% else %}
+
+        <!-- ===== Formulario de consulta ===== -->
+        <p class="panel-intro">
+            Ingresa el código que recibiste al reservar y el RUT de la persona
+            que hizo la reserva.
+        </p>
+
+        {% if bloqueado %}
+            <p class="disponibilidad-error">
+                Demasiadas consultas fallidas. Por seguridad, intenta de nuevo
+                en {{ minutos_bloqueo }} minutos.
+            </p>
+        {% else %}
+            <form method="post" class="formulario-habitacion formulario-consulta" novalidate>
+                {% csrf_token %}
+
+                {{ formulario.non_field_errors }}
+
+                {% for campo in formulario %}
+                    <div class="campo-formulario">
+                        <label for="{{ campo.id_for_label }}">
+                            {{ campo.label }} <span class="obligatorio">*</span>
+                        </label>
+                        {{ campo }}
+                        {{ campo.errors }}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn-panel btn-panel-primario">
+                    Consultar reserva
+                </button>
+            </form>
+        {% endif %}
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
